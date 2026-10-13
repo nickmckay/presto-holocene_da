@@ -184,12 +184,14 @@ print(' - Number of records with uncertainty values: '+str(sum(proxy_ind_with_un
 # Erb et al. (2022) assimilate annual, summerOnly and winterOnly records. In
 # Temperature 12k, summer+ and winter+ mark the seasonal reconstructions of a
 # site that also has an annual one, so the filter keeps one record per site.
-# presto_season_filter: false assimilates every seasonality.
+# The filter is opt-in (presto_season_filter: true), because these
+# seasonalityGeneral labels are only used consistently within Temperature 12k;
+# PReSto pools choose one record per site and proxy upstream.
 _seasons = options['assimilate_selected_seasons']
 if isinstance(_seasons, str):
     import ast
     _seasons = False if _seasons.strip().lower() in ('false', 'none', '') else ast.literal_eval(_seasons)
-_season_filter = str(options.get('presto_season_filter', True)).lower() not in ('false', '0', 'no', 'none')
+_season_filter = str(options.get('presto_season_filter', False)).lower() in ('true', '1', 'yes')
 # Pool records outside Temperature 12k carry other seasonalityGeneral text
 # ('Annual', 'Summer', 'warmest month'); the filter reads the five Temp12k
 # classes case-insensitively and leaves other values eligible.
